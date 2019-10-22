@@ -53,4 +53,20 @@
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
+  <ItemGroup>
+    <Media Include="bounce.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="lose.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="jazz.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="README.md">
+      <Filter>Source Files</Filter>
+    </None>
+  </ItemGroup>
 </Project>

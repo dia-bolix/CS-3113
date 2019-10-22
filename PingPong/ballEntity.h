@@ -23,6 +23,8 @@ public:
 	float width;
 	float height;
 
+
+
 	GLuint textureID;
 
 	ballEntity();

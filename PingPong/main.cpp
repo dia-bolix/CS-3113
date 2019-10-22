@@ -10,6 +10,7 @@
 #include "glm/mat4x4.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "ShaderProgram.h"
+#include <SDL_mixer.h>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
@@ -21,6 +22,7 @@ SDL_Window* displayWindow;
 bool gameIsRunning = true;
 bool gameOver = false;
 
+
 ShaderProgram program;
 glm::mat4 viewMatrix, modelMatrix, projectionMatrix;
 
@@ -29,6 +31,10 @@ float lastTicks = 0;
 Entity leftpong;
 Entity rightpong;
 ballEntity ball;
+
+Mix_Chunk* bounce;
+Mix_Chunk* lose;
+Mix_Music* music;
 
 
 GLuint fontTextureID;
@@ -55,74 +61,88 @@ GLuint LoadTexture(const char* filePath) {
 }
 
 void Initialize() {
-    SDL_Init(SDL_INIT_VIDEO);
+    SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
     displayWindow = SDL_CreateWindow("Test", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 640, 480, SDL_WINDOW_OPENGL);
     SDL_GLContext context = SDL_GL_CreateContext(displayWindow);
     SDL_GL_MakeCurrent(displayWindow, context);
     
 #ifdef _WINDOWS
-    glewInit();
+glewInit();
 #endif
-    
-    glViewport(0, 0, 640, 480);
-    
-    program.Load("shaders/vertex_textured.glsl", "shaders/fragment_textured.glsl");
-    
-    leftpong.textureID = LoadTexture("left_pong.png");
-	leftpong.speed = 2;
-	rightpong.textureID = LoadTexture("right_pong.png");
-	rightpong.speed = 2;
-	ball.textureID = LoadTexture("ball.png");
-	ball.speed = 2;
-	ball.movement.y = -.5;
-	ball.movement.x = -1;
 
-	//make pongs show up on the left/right side of the screens
-	leftpong.position = glm::vec3(-5,0,0);
-	rightpong.position = glm::vec3(5,0,0);
-    
-    viewMatrix = glm::mat4(1.0f);
-    modelMatrix = glm::mat4(1.0f);
-    projectionMatrix = glm::ortho(-5.0f, 5.0f, -3.75f, 3.75f, -1.0f, 1.0f);
-    
-    program.SetProjectionMatrix(projectionMatrix);
-    program.SetViewMatrix(viewMatrix);
-    program.SetColor(1.0f, 0.0f, 0.0f, 1.0f);
-    
-    glUseProgram(program.programID);
-    
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    
-	//midnight blue background
-    glClearColor(0.0f, 0.2f, 0.4f, 1.0f);
+//audio function
+int Mix_OpenAudio(int frequency, Uint16 format, int channels, int chunksize);
+Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096);
+music = Mix_LoadMUS("jazz.wav");
+lose = Mix_LoadWAV("lose.wav");
+bounce = Mix_LoadWAV("bounce.wav");
+
+Mix_PlayMusic(music, -1);
+Mix_VolumeChunk(lose, MIX_MAX_VOLUME/4);
+Mix_VolumeChunk(bounce, MIX_MAX_VOLUME / 4);
+Mix_VolumeMusic(MIX_MAX_VOLUME / 2);
+
+glViewport(0, 0, 640, 480);
+
+program.Load("shaders/vertex_textured.glsl", "shaders/fragment_textured.glsl");
+
+leftpong.textureID = LoadTexture("left_pong.png");
+leftpong.speed = 2;
+rightpong.textureID = LoadTexture("right_pong.png");
+rightpong.speed = 2;
+ball.textureID = LoadTexture("ball.png");
+ball.speed = 2;
+ball.movement.y = -.5;
+ball.movement.x = -1;
+
+//make pongs show up on the left/right side of the screens
+leftpong.position = glm::vec3(-5, 0, 0);
+rightpong.position = glm::vec3(5, 0, 0);
+
+viewMatrix = glm::mat4(1.0f);
+modelMatrix = glm::mat4(1.0f);
+projectionMatrix = glm::ortho(-5.0f, 5.0f, -3.75f, 3.75f, -1.0f, 1.0f);
+
+program.SetProjectionMatrix(projectionMatrix);
+program.SetViewMatrix(viewMatrix);
+program.SetColor(1.0f, 0.0f, 0.0f, 1.0f);
+
+glUseProgram(program.programID);
+
+glEnable(GL_BLEND);
+glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+//midnight blue background
+glClearColor(0.0f, 0.2f, 0.4f, 1.0f);
 }
 
 void ProcessInput() {
-    //set to 0 so paddles don't keep moving when key not pressed
+	//set to 0 so paddles don't keep moving when key not pressed
 	leftpong.movement = glm::vec3(0, 0, 0);
 	rightpong.movement = glm::vec3(0, 0, 0);
 
-    SDL_Event event;
-    while (SDL_PollEvent(&event)) {
-        switch (event.type) {
-            case SDL_QUIT:
-            case SDL_WINDOWEVENT_CLOSE:
-                gameIsRunning = false;
-                break;
+	SDL_Event event;
+	while (SDL_PollEvent(&event)) {
+		switch (event.type) {
+		case SDL_QUIT:
+		case SDL_WINDOWEVENT_CLOSE:
+			gameIsRunning = false;
+			break;
 
-        }
-    }
+		}
+	}
 	//3.75 to check if on edge of screen
 	const Uint8* keys = SDL_GetKeyboardState(NULL);
 	if (keys[SDL_SCANCODE_W] && leftpong.position.y <= 3.75 && !gameOver) {
 		leftpong.movement.y = 1;
-	} else if (keys[SDL_SCANCODE_S] && leftpong.position.y >= -3.75 && !gameOver) {
+	}
+	else if (keys[SDL_SCANCODE_S] && leftpong.position.y >= -3.75 && !gameOver) {
 		leftpong.movement.y = -1;
 	}
 	if (keys[SDL_SCANCODE_UP] && rightpong.position.y <= 3.75 && !gameOver) {
 		rightpong.movement.y = 1;
-	} else if (keys[SDL_SCANCODE_DOWN] && rightpong.position.y >= -3.75 && !gameOver) {
+	}
+	else if (keys[SDL_SCANCODE_DOWN] && rightpong.position.y >= -3.75 && !gameOver) {
 		rightpong.movement.y = -1;
 	}
 
@@ -131,27 +151,25 @@ void ProcessInput() {
 //modify update for pong and ball
 //if ball didn't collside and reached the edge stop moving
 void Update() {
-    float ticks = (float)SDL_GetTicks() / 1000.0f;
-    float deltaTime = ticks - lastTicks;
-    lastTicks = ticks;
-    
-    leftpong.Update(deltaTime);
+	float ticks = (float)SDL_GetTicks() / 1000.0f;
+	float deltaTime = ticks - lastTicks;
+	lastTicks = ticks;
+	leftpong.Update(deltaTime);
 	rightpong.Update(deltaTime);
-	
-	//if (abs(ball.position.y) >= 3.5f) {
-		
-	//}
 
-	//the ball will bounce if it touches the top or bottom of the screen, as well as the paddles
 	if (ball.checkCollide(leftpong) || ball.checkCollide(rightpong) || abs(ball.position.y) >= 3.75f) {
 		ball.bounce();
+		Mix_PlayChannel(-1, bounce, 0);
 	}
+		
 	else if (abs(ball.position.x) >= 5.0f) {
-		ball.movement = glm::vec3(0);
 		gameOver = true;
-	}
-	
+		ball.movement = glm::vec3(0);
+		Mix_PlayChannel(-1, lose, 0);
+		Mix_HaltMusic();
+	}	
 	ball.Update(deltaTime);
+	return;
 }
 
 void Render() {
@@ -164,6 +182,10 @@ void Render() {
 }
 
 void Shutdown() {
+	//need to release sounds
+	Mix_FreeChunk(lose);
+	Mix_FreeChunk(bounce);
+	Mix_FreeMusic(music);
     SDL_Quit();
 }
 

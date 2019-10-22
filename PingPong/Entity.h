@@ -16,7 +16,8 @@
 
 class Entity {
 public:
-    
+
+
     glm::vec3 position;
     glm::vec3 movement;
     float speed;

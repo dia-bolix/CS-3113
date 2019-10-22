@@ -144,6 +144,14 @@
     <Image Include="left_pong.png" />
     <Image Include="right_pong.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Media Include="bounce.wav" />
+    <Media Include="jazz.wav" />
+    <Media Include="lose.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="README.md" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
