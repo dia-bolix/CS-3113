@@ -12,4 +12,4 @@ The following functionality is completed:
 - [x] Ball bounces between paddles
 ## Notes
 
-Having issues getting the "lose" audio to only play once.
+The ball sometimes gets stuck inside the paddle if it touches the edge of a paddle. 

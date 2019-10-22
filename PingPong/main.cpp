@@ -151,6 +151,9 @@ void ProcessInput() {
 //modify update for pong and ball
 //if ball didn't collside and reached the edge stop moving
 void Update() {
+	if (gameOver) {
+		return;
+	}
 	float ticks = (float)SDL_GetTicks() / 1000.0f;
 	float deltaTime = ticks - lastTicks;
 	lastTicks = ticks;
@@ -169,7 +172,7 @@ void Update() {
 		Mix_HaltMusic();
 	}	
 	ball.Update(deltaTime);
-	return;
+	
 }
 
 void Render() {
