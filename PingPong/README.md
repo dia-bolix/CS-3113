@@ -1,6 +1,6 @@
 # Ping Pong
 
-Ping Pong is a two-player game where a ball is bounced between two paddles. The left paddle uses the A and S keys for upward and downward movements. The right paddle uses the UP and DOWN arrow keys for up and down movements.
+Ping Pong is a two-player game where a ball is bounced between two paddles. The left paddle uses the <kbd>A</kbd> and <kbd>S</kbd> keys for upward and downward movements. The right paddle uses the <kbd>UP</kbd> and <kbd>DOWN</kbd> arrow keys for up and down movements.
 
 ## Functionality
 
