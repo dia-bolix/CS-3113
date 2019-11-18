@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DEFECTS>
+  <DEFECT>
+    <SFA>
+      <FILEPATH>C:\SDL\SDL2\include\</FILEPATH>
+      <FILENAME>SDL_rect.h</FILENAME>
+      <LINE>76</LINE>
+      <COLUMN>28</COLUMN>
+    </SFA>
+    <DEFECTCODE>26812</DEFECTCODE>
+    <DESCRIPTION>The enum type 'SDL_bool' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).</DESCRIPTION>
+    <FUNCTION>SDL_PointInRect</FUNCTION>
+    <DECORATED>SDL_PointInRect</DECORATED>
+    <FUNCLINE>73</FUNCLINE>
+    <PATH></PATH>
+  </DEFECT>
+  <DEFECT>
+    <SFA>
+      <FILEPATH>C:\Users\nahbr\source\repos\GP 1\Project\</FILEPATH>
+      <FILENAME>Scene.h</FILENAME>
+      <LINE>20</LINE>
+      <COLUMN>0</COLUMN>
+    </SFA>
+    <DEFECTCODE>26495</DEFECTCODE>
+    <DESCRIPTION>Variable 'GameState::nextLevel' is uninitialized. Always initialize a member variable (type.6).</DESCRIPTION>
+    <FUNCTION>GameState::{ctor}</FUNCTION>
+    <DECORATED>??0GameState@@QAE@XZ</DECORATED>
+    <FUNCLINE>20</FUNCLINE>
+    <ADDITIONALINFO>
+      <targetSymbol>GameState::nextLevel</targetSymbol>
+    </ADDITIONALINFO>
+    <PATH></PATH>
+  </DEFECT>
+  <DEFECT>
+    <SFA>
+      <FILEPATH>C:\Users\nahbr\source\repos\GP 1\Project\</FILEPATH>
+      <FILENAME>Scene.h</FILENAME>
+      <LINE>20</LINE>
+      <COLUMN>0</COLUMN>
+    </SFA>
+    <DEFECTCODE>26495</DEFECTCODE>
+    <DESCRIPTION>Variable 'GameState::map' is uninitialized. Always initialize a member variable (type.6).</DESCRIPTION>
+    <FUNCTION>GameState::{ctor}</FUNCTION>
+    <DECORATED>??0GameState@@QAE@XZ</DECORATED>
+    <FUNCLINE>20</FUNCLINE>
+    <ADDITIONALINFO>
+      <targetSymbol>GameState::map</targetSymbol>
+    </ADDITIONALINFO>
+    <PATH></PATH>
+  </DEFECT>
+</DEFECTS>
